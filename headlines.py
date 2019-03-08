@@ -1,5 +1,9 @@
 import requests
 import bs4
+import pandas as pd
+import matplotlib.pyplot as plt
+from pprint import pprint
+import nltk
 
 headers = {
     "User-Agent":
@@ -12,12 +16,32 @@ print(r.url)
 
 soup = bs4.BeautifulSoup(r.text, 'lxml')
 
-headlines = soup.select("div.g.card h3")
+base = soup.select("div.g.card h3")
 
-headlines_clean = []
+headlines = []
 
-for row in headlines:
+for row in base:
     clean = row.text
-    headlines_clean.append(clean)
+    headlines.append(clean)
 
-print(headlines_clean)
+print(headlines)
+
+import nltk
+nltk.download('vader_lexicon')
+
+from nltk.sentiment.vader import SentimentIntensityAnalyzer as SIA
+
+sia = SIA()
+results = []
+count = 0
+
+for line in headlines:
+    pol_score = sia.polarity_scores(line)
+    pol_score['headline'] = headlines[count]
+    count = count + 1
+    results.append(pol_score)
+
+pprint(results)
+
+df = pd.DataFrame.from_records(results)
+df.head()
