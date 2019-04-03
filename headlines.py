@@ -54,23 +54,26 @@ for count, each in enumerate(headlines):
     tokens.append(clean)
 
 #print to verify
-print(tokens)
-
+for x in tokens:
+    for y in x:
+        print(y)
 #create stopwords list from nltk and add fallout 76 as stopwords
 stopwords = nltk.corpus.stopwords.words('english')
 stopwords.append("fallout")
 stopwords.append('76')
 stopwords.append("'fallout")
 
-print(stopwords)
+#print(stopwords)
+filtered_sentence = []
+for list in tokens:
+    x = []
+    for word in list:
+        if word not in stopwords:
+            x.append(word)
+        if not x:
+            filtered_sentence.append(x)
 
-filtered_headline = []
-filtered_headlines = []
-
-for listitem in tokens:
-
-
-print(*filtered_headline, sep = "\n")
+print(filtered_sentence, sep = "\n")
 
 """"
 nltk.download('vader_lexicon')
