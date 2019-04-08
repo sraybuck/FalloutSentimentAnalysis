@@ -3,6 +3,7 @@ import bs4
 import pandas as pd
 import nltk
 import csv
+import time
 from nltk.corpus import stopwords
 
 #method definition for tokenization later
@@ -85,11 +86,12 @@ def analyze(soup_object, csv_name):
 
 
     #write sentiment analysis to csv file
-    with open(csv_name, 'w') as csv_file:
+    with open(csv_name, 'a') as csv_file:
         writer = csv.writer(csv_file)
         for dict in results:
             for key, value in dict.items():
                 writer.writerow([key, value])
+
 
 #method definition for getting next page url
 def next_page_url(soup_object):
@@ -122,10 +124,8 @@ def create_firstsoup(payload):
     return soup
 
 def create_nextsoup(url):
-    #metadata so that google doesn't think I'm a robot
-    headers = {
-        "User-Agent":
-            "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.157 Safari/537.36"
+    #header to identify myself when scraping so google doesnt flag me as a robot
+    headers = {"User-Agent": "Mozilla/5.0 Chrome/44.0.2403.157; Suzanne Raybuck/Florida State University IT Student/ smr17c@my.fsu.edu"
     }
     #actually going and talking to the website with the metadata and query
     r = requests.get(url, headers=headers)
@@ -139,7 +139,18 @@ def create_nextsoup(url):
 
 #the google query that im making
 payload = {'as_epq': 'Fallout 76', 'tbs':'cdr:1,cd_min:11/14/2018,cd_max:12/14/2018', 'tbm':'nws'}
+
+#use payload to scrape initial search results page
 soup = create_firstsoup(payload)
-analyze(soup, "results0.csv")
-n1 = next_page_url(soup)
-print(n1)
+time.sleep(5)
+#create count variable for while loop
+count = 0
+
+#loop to analyze pages and get next page
+while count < 19:
+    analyze(soup, "results.csv")
+    n1 = next_page_url(soup)
+    print(n1)
+    time.sleep(5)
+    soup = create_nextsoup(n1)
+    count += 1

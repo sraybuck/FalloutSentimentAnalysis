@@ -42,7 +42,7 @@ for row in base:
     headlines.append(clean)
 
 #print to verify headlines are clean
-print(headlines)
+#print(headlines)
 
 #empty list to store tokenized headlines
 tokens = []
@@ -53,7 +53,7 @@ for each in headlines:
     tokens.append(clean)
 
 #print tokens to verify
-print('tokens =',tokens)
+#print('tokens =',tokens)
 
 #create stopwords list from nltk and add fallout 76 as stopwords
 stopwords = nltk.corpus.stopwords.words('english')
@@ -71,7 +71,7 @@ for list in tokens:
     filtered.append(x)
 
 #print to verify stopwords are gone
-print("filtered = ", filtered)
+#print("filtered = ", filtered)
 
 #declare empty list so I can put the tokens back into headlines without stopwords
 combined = []
