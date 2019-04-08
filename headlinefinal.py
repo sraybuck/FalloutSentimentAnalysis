@@ -82,7 +82,7 @@ def analyze(soup_object, csv_name):
 
     #print to verify
     #for i in results:
-    #    print(i)
+        #print(i)
 
 
     #write sentiment analysis to csv file
@@ -96,15 +96,17 @@ def analyze(soup_object, csv_name):
 #method definition for getting next page url
 def next_page_url(soup_object):
     #select anchor tags for next page
-    link = soup_object.select("td.b.navend a.pn")
+    link = soup_object.select("#pnnext")
+    #print("link =", link)
 
     #get the url from the anchor tag
     for i in link:
         url = i.get('href')
-
+    #    print("next = ", url)
+    
     #add google site base to url
     url = "https://www.google.com" + url
-    #print url to verify
+
     return url
 
 def create_firstsoup(payload):
@@ -117,7 +119,7 @@ def create_firstsoup(payload):
     r = requests.get("https://www.google.com/search", params=payload, headers=headers)
 
     #print url to verify its correct
-    #print(r.url)
+    #print("first = ",r.url)
 
     #create BeautifulSoup object out of the text from the initial request
     soup = bs4.BeautifulSoup(r.text, 'lxml')
@@ -125,13 +127,12 @@ def create_firstsoup(payload):
 
 def create_nextsoup(url):
     #header to identify myself when scraping so google doesnt flag me as a robot
-    headers = {"User-Agent": "Mozilla/5.0 Chrome/44.0.2403.157; Suzanne Raybuck/Florida State University IT Student/ smr17c@my.fsu.edu"
+    headers = {
+        "User-Agent":
+            "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.157 Safari/537.36"
     }
-    #actually going and talking to the website with the metadata and query
+    #actually going and talking to the website with the header and query
     r = requests.get(url, headers=headers)
-
-    #print url to verify its correct
-    #print(r.url)
 
     #create BeautifulSoup object out of the text from the initial request
     soup = bs4.BeautifulSoup(r.text, 'lxml')
@@ -142,7 +143,7 @@ payload = {'as_epq': 'Fallout 76', 'tbs':'cdr:1,cd_min:11/14/2018,cd_max:12/14/2
 
 #use payload to scrape initial search results page
 soup = create_firstsoup(payload)
-time.sleep(5)
+time.sleep(10)
 #create count variable for while loop
 count = 0
 
@@ -150,7 +151,7 @@ count = 0
 while count < 19:
     analyze(soup, "results.csv")
     n1 = next_page_url(soup)
-    print(n1)
-    time.sleep(5)
+    print("iteration ",count, " = ", n1)
+    time.sleep(10)
     soup = create_nextsoup(n1)
     count += 1
