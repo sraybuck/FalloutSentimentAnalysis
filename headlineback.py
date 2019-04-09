@@ -16,7 +16,7 @@ def clean_tokens(a_list):
     return clean_words
 
 #method definition to do all of sentiment analysis
-def analyze(soup_object, csv_name):
+def analyze(soup_object):
 
     #select only the headlines in each google search result
     base = soup_object.select("div.g.card h3")
@@ -86,7 +86,7 @@ def analyze(soup_object, csv_name):
 
 
     #write sentiment analysis to csv file
-    with open('resultsfinal.csv', 'a') as csv_file:
+    with open("resultsback.csv", 'a') as csv_file:
         writer = csv.writer(csv_file)
         for d in results:
             writer.writerow(['compound', d['compound']])
@@ -138,7 +138,7 @@ def create_nextsoup(url):
     return soup
 
 #the google query that im making
-payload = {'as_epq': 'Fallout 76', 'tbs':'cdr:1,cd_min:11/14/2018,cd_max:12/14/2018', 'tbm':'nws'}
+payload = {'as_epq': 'Fallout 76', 'tbs':'cdr:1,cd_min:10/13/2018,cd_max:11/13/2018', 'tbm':'nws'}
 
 #use payload to scrape initial search results page
 soup = create_firstsoup(payload)
@@ -148,7 +148,7 @@ count = 0
 
 #loop to analyze pages and get next page
 while count < 19:
-    analyze(soup, "results1.csv")
+    analyze(soup)
     n1 = next_page_url(soup)
     print("iteration ",count, " = ", n1)
     time.sleep(10)

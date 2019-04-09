@@ -93,13 +93,12 @@ for line in combined:
     results.append(pol_score)
 
 #print to verify
-for i in results:
-    print(i)
-"""
+for d in results:
+    print(d['compound'])
+
+
 #write sentiment analysis to csv file
-with open('resultslist.csv', 'w') as csv_file:
+with open('headlines.csv', 'w') as csv_file:
     writer = csv.writer(csv_file)
-    for dict in results:
-        for key, value in dict.items():
-            writer.writerow([key, value])
-"""
+    for d in results:
+        writer.writerow(['compound', d['compound']])
