@@ -3,6 +3,7 @@ import bs4
 import pandas as pd
 import nltk
 import csv
+import time
 from nltk.corpus import stopwords
 
 #method definition for tokenization later
@@ -25,7 +26,8 @@ payload = {'as_epq': 'Fallout 76', 'tbs':'cdr:1,cd_min:11/14/2018,cd_max:12/14/2
 r = requests.get("https://www.google.com/search", params=payload, headers=headers)
 
 #print url to verify its correct
-print(r.url)
+print("URL = ", r.url)
+time.sleep(3)
 
 #create BeautifulSoup object out of the text from the requested site
 soup = bs4.BeautifulSoup(r.text, 'lxml')
@@ -42,7 +44,9 @@ for row in base:
     headlines.append(clean)
 
 #print to verify headlines are clean
-#print(headlines)
+print("")
+print("HEADLINES = ", headlines)
+time.sleep(3)
 
 #empty list to store tokenized headlines
 tokens = []
@@ -53,7 +57,9 @@ for each in headlines:
     tokens.append(clean)
 
 #print tokens to verify
-#print('tokens =',tokens)
+print("")
+print('TOKENS =',tokens)
+time.sleep(3)
 
 #create stopwords list from nltk and add fallout 76 as stopwords
 stopwords = nltk.corpus.stopwords.words('english')
@@ -70,6 +76,10 @@ for list in tokens:
             x.append(word)
     filtered.append(x)
 
+print("")
+print('FILTERED =',filtered)
+time.sleep(3)
+
 #print to verify stopwords are gone
 #print("filtered = ", filtered)
 
@@ -79,6 +89,10 @@ combined = []
 #put tokens back into headlines without stopwords
 for list in filtered:
     combined.append(" ".join(list))
+
+print("")
+print('COMBINED =',combined)
+time.sleep(3)
 
 #import sentiment analyzer
 from nltk.sentiment.vader import SentimentIntensityAnalyzer as SIA
@@ -93,12 +107,12 @@ for line in combined:
     results.append(pol_score)
 
 #print to verify
+print("")
 for d in results:
-    print(d['compound'])
-
+    print(d)
 
 #write sentiment analysis to csv file
-with open('headlines.csv', 'w') as csv_file:
+with open('TEST.csv', 'w') as csv_file:
     writer = csv.writer(csv_file)
     for d in results:
         writer.writerow(['compound', d['compound']])
